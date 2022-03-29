@@ -7,7 +7,7 @@ a:hover{
 }
 
 #picture-header {
-  background-image: url('./assets/bike-background.jpg');
+  background-image: url('../images/bike-background.jpg');
   background-size: cover;
   background-position: center;
   height: 210px;
