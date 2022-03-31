@@ -34,56 +34,60 @@
   </div>
 
   <div class="container-fluid p-0">
-    <div class="table-responsive-xl">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Picture</th>
-            <th scope="col">Model</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
-            <th scope="col">Total</th>
-            <th scope="col">Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% 
-            var total = 0;
-            for (var i=0; i<dataCardBike.length; i++) {
-              var bike = dataBike[dataCardBike[i].bikeIndex];
-              var qty = dataCardBike[i].quantity;
-              total += (bike.prix*qty);
-          %>
-            <tr class="my-gray">
-              <th scope="row"><%= i %></th>
-              <td><img src=<%= bike.image %> class="img-fluid basket-img" /></td>
-              <td class="mt-3"><%= bike.nom %></td>
-              <td><form action="/shop" method="POST">
-                <input type="hidden" name="index" value=<%= dataCardBike[i].bikeIndex %> />
-                <input type="text" class="m-1" name="qty" value=<%= qty %> />
-                <button type="submit" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-arrows-rotate"></i></button>
-              </form></td>
-              <td><%= bike.prix %>€</td>
-              <td><%= bike.prix*qty %>€</td>
-              <td><a href="/delete-shop?remove=<%= dataCardBike[i].bikeIndex %>" role="button" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-trash-can"></i></a></td>
+    <% if (dataCardBike.length < 1) { %>
+      <p id="no-article"><em>No Article in the Basket</em></p>
+    <% } else { console.log(dataCardBike); %>
+      <div class="table-responsive-xl">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Picture</th>
+              <th scope="col">Model</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Total</th>
+              <th scope="col">Remove</th>
             </tr>
-          <% } %>
-          <tr>
-            <th></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Total Basket: </td>
-            <td><%= total %>€</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div id="checkout">
-    <a href="#" role="button" class="btn btn-md btn-outline-info">Checkout</a>
+          </thead>
+          <tbody>
+            <% 
+              var total = 0;
+              for (var i=0; i<dataCardBike.length; i++) {
+                var bike = dataBike[dataCardBike[i].bikeIndex];
+                var qty = dataCardBike[i].quantity;
+                total += (bike.prix*qty);
+            %>
+              <tr class="my-gray">
+                <th scope="row"><%= i %></th>
+                <td><img src=<%= bike.image %> class="img-fluid basket-img" /></td>
+                <td class="mt-3"><%= bike.nom %></td>
+                <td><form action="/shop" method="POST">
+                  <input type="hidden" name="index" value=<%= dataCardBike[i].bikeIndex %> />
+                  <input type="text" class="m-1" name="qty" value=<%= qty %> />
+                  <button type="submit" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-arrows-rotate"></i></button>
+                </form></td>
+                <td><%= bike.prix %>€</td>
+                <td><%= bike.prix*qty %>€</td>
+                <td><a href="/delete-shop?remove=<%= dataCardBike[i].bikeIndex %>" role="button" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-trash-can"></i></a></td>
+              </tr>
+            <% } %>
+            <tr>
+              <th></th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Total Basket: </td>
+              <td><%= total %>€</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="checkout">
+        <a href="#" role="button" class="btn btn-md btn-outline-info">Checkout</a> 
+      </div>
+    <% } %>
   </div>
 
 

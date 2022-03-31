@@ -17,10 +17,20 @@
 
 
 
-  <nav class="navbar navbar-light bg-dark">
+  <nav class="navbar navbar-light bg-dark justify-content-between">
     <a class="navbar" href="/">
       <img src="images/bike-logo.svg" width="50" height="50" class="logo" alt="">
       The Bike Shop Experience
+    </a>
+    <a class="btn btn-secondary btn-outline-light position-relative text-decoration-none me-4" href="/shop">
+      <i class="fa-solid fa-cart-shopping me-2"></i>
+      <span class="text-decoration-underline me-2">My Basket</span>
+      <% if (total !== 0) { %>
+        <% console.log(total) %>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          <%= total %>
+        </span>
+      <% } %>
     </a>
   </nav>
   <div id="picture-header"></div>
@@ -39,7 +49,7 @@
                 <div class="me-3"> 
                   <p class="card-text"><%= dataBike[i].prix %>€</p>
                 </div>
-                <a href="/shop?new=<%= i %>" role="button" class="btn btn-outline-info pt-0 pb-1">Buy</a>
+                <a href="/?new=<%= i %>" role="button" class="btn btn-outline-info pt-0 pb-1">Buy</a>
               </div>
             </div>
           </div>
