@@ -39,3 +39,20 @@ a:hover{
   color: red;
   padding-left: 15px;
 }
+
+#success {
+  height: 60vh;
+}
+
+#beta-testing {
+  font-size: 15px;
+  color: yellow;
+  background: red;
+  border: 1px solid black;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom-left-radius: 10% 30%;
+  border-bottom-right-radius: 10% 30%;
+  border-top-left-radius: 10% 30%;
+  border-top-right-radius: 10% 30%;
+}

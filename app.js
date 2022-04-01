@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -10,6 +11,8 @@ var usersRouter = require('./routes/users');
 var session = require('express-session');
 
 var app = express();
+
+// use session
 app.use(
   session({
     secret: 'a4f8071f-c873-4447-8ee2',

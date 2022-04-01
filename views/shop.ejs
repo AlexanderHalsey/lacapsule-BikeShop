@@ -21,6 +21,10 @@
       <img src="images/bike-logo.svg" width="50" height="50" class="logo" alt="">
       The Bike Shop Experience
     </a>
+    <div id="beta-testing" class="navbar-text">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>Beta Testing</span>
+    </div>
   </nav>
 
   <div class="container-fluid">
@@ -36,7 +40,7 @@
   <div class="container-fluid p-0">
     <% if (dataCardBike.length < 1) { %>
       <p id="no-article"><em>No Article in the Basket</em></p>
-    <% } else { console.log(dataCardBike); %>
+    <% } else { %>
       <div class="table-responsive-xl">
         <table class="table">
           <thead>
@@ -85,13 +89,12 @@
         </table>
       </div>
       <div id="checkout">
-        <a href="#" role="button" class="btn btn-md btn-outline-info">Checkout</a> 
+        <form action="/create-checkout-session" method="POST">
+          <button type="submit" id="checkout-button" class="btn btn-md btn-outline-info">Checkout</button>
+        </form>
       </div>
     <% } %>
   </div>
-
-
-
 
 
   <!-- scripts -->

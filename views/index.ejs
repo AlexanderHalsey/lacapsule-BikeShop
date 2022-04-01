@@ -22,11 +22,14 @@
       <img src="images/bike-logo.svg" width="50" height="50" class="logo" alt="">
       The Bike Shop Experience
     </a>
+    <div id="beta-testing" class="navbar-text">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>Beta Testing</span>
+    </div>
     <a class="btn btn-secondary btn-outline-light position-relative text-decoration-none me-4" href="/shop">
       <i class="fa-solid fa-cart-shopping me-2"></i>
       <span class="text-decoration-underline me-2">My Basket</span>
       <% if (total !== 0) { %>
-        <% console.log(total) %>
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           <%= total %>
         </span>
