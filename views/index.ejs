@@ -40,7 +40,38 @@
 
 
   <!-- BIKES SECTION: initializing of the grid here -->
-  <div class="container">
+  <div id="mea" class="container">
+    <div class="row">
+      <% if (mea.length > 0) { %>
+        <div id="hide-2" class="col-4">
+          Great Deals !!!
+        </div>
+        <div class="col-4">
+          Don't miss out !!!
+        </div>
+        <div id="hide-1" class="col-4">
+          Buy Now !!!
+        </div>
+      <% } %>
+      <% for (var i=0; i<mea.length; i++) { %>
+        <div class="col-12 col-sm-6 col-md-4 mt-1">
+          <div class="card pt-3">
+            <img src=<%= mea[i].image %> class="card-img-top" />
+            <div class="card-body text-center">
+              <h5 class="card-title"><%= mea[i].nom %></h5>
+              <div class="d-flex justify-content-center align-items-center mt-4">
+                <div class="me-3"> 
+                  <p class="card-text"><%= mea[i].prix %>€</p>
+                </div>
+                <a href="/?new=<%= i %>" role="button" class="btn btn-outline-info btn-lg pt-0 pb-1">Buy</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  <div class="container mt-5">
     <div class="row">
       <% for (var i=0; i<dataBike.length; i++) { %>
         <div class="col-12 col-sm-6 col-md-4">

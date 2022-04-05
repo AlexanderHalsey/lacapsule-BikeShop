@@ -56,3 +56,23 @@ a:hover{
   border-top-left-radius: 10% 30%;
   border-top-right-radius: 10% 30%;
 }
+
+#mea {
+  background-color: red;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 35px;
+  color: yellow;
+  border-bottom-left-radius: 2% 5%;
+  border-bottom-right-radius: 2% 5%;
+  border-top-left-radius: 2% 5%;
+  border-top-right-radius: 2% 5%;
+}
+
+#mea .card {
+  color: black;
+}
+
+#mea .card-text {
+  color: green;
+}

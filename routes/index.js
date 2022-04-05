@@ -1,9 +1,10 @@
 var express = require('express');
 const { route } = require('express/lib/application');
-const { default: Stripe } = require('stripe');
-const { path } = require('../app');
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 var router = express.Router();
 
+
+var shippingCost = 30;
 
 var dataBike = [
   {
@@ -38,14 +39,27 @@ var dataBike = [
   },
 ];
 
+const update_shipping = (tabl) => {
+  for (obj of tabl) {
+    var total = obj.quantity * dataBike[obj.bikeIndex].prix
+    if (total > 4000) {
+      obj.shippingCost = 0;
+    } else if (total > 2000) {
+      obj.shippingCost = 15*obj.quantity;
+    } else {
+      obj.shippingCost = 30*obj.quantity;
+    }
+  }
+  return
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  /* initialiser ou modifier le variable dataCardBike qui se trouve dans le session */
+  /* initialiser ou modifier les variable dataCardBike et total qui se trouve dans le session */
   if (!req.session.dataCardBike) req.session.dataCardBike = [];
-  /* initialiser ou modifier le variable total qui se trouve dans le session */
   if (!req.session.total) req.session.total = 0;
-
   var dataCardBike = req.session.dataCardBike;
+
   /* Si on fait un requete avec un ordre pour le panier on va modifier notre tableau */
   if (Object.entries(req.query).length !== 0) {
     req.session.total++;
@@ -60,15 +74,19 @@ router.get('/', function(req, res, next) {
         quantity: 1,
       });
     };
+    update_shipping(dataCardBike);
   };
+  /* Mis en avant */
+  var mea = dataBike.sort((a,b) => a.prix - b.prix).slice(0,3);
 
-  res.render('index', { dataBike, dataCardBike, total: req.session.total });
+  res.render('index', { dataBike, dataCardBike, total: req.session.total, mea });
 });
 
 router.get('/shop', function(req, res, next) {
   /* initialiser ou modifier le variable dataCardBike qui se trouve dans le session */
   if (!req.session.dataCardBike) req.session.dataCardBike = [];
   var dataCardBike = req.session.dataCardBike;
+  update_shipping(dataCardBike);
   res.render('shop', { dataBike, dataCardBike });
 });
 
@@ -81,7 +99,7 @@ router.get("/delete-shop", function(req, res, next) {
   req.session.total -= removeBike.quantity;
   /* on supprime un element a l'index correspondant */
   dataCardBike.splice(dataCardBike.indexOf(removeBike), 1);
-
+  update_shipping(dataCardBike);
   res.render("shop", { dataBike, dataCardBike });
 });
 
@@ -94,14 +112,12 @@ router.post('/shop', function(req, res, next) {
   req.session.total -= dataCardBike[dataCardBike.indexOf(findBike)].quantity;
   dataCardBike[dataCardBike.indexOf(findBike)].quantity = parseInt(req.body.qty);
   req.session.total += parseInt(req.body.qty);
-
+  update_shipping(dataCardBike);
+  console.log(dataCardBike);
   res.render("shop", { dataBike, dataCardBike })
 });
 
 router.post('/create-checkout-session', async function(req, res, next) {
-  /* acceder stripe avec le clé privé */
-  var stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
-
   /* créer le tableau qui va etre envoye sur la page checkout de stripe  */
   var line_items = [];
   for (obj of req.session.dataCardBike) {
@@ -111,7 +127,7 @@ router.post('/create-checkout-session', async function(req, res, next) {
     });
     const price = await stripe.prices.create({
       product: product.id,
-      unit_amount: dataBike[obj.bikeIndex].prix * 100,
+      unit_amount: (dataBike[obj.bikeIndex].prix+(obj.shippingCost/obj.quantity)) * 100,
       currency: 'eur',
     })
     line_items.push({
