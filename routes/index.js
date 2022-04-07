@@ -1,57 +1,10 @@
 var express = require('express');
 const { route } = require('express/lib/application');
+const { update_shipping } = require('./utils');
+const { dataBike } = require('./infos');
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 var router = express.Router();
 
-
-var shippingCost = 30;
-
-var dataBike = [
-  {
-    nom: "BIKO45",
-    prix: 679,
-    image: "images/bike-1.jpg",
-  },
-  {
-    nom: "ZOOK7",
-    prix: 799,
-    image: "images/bike-2.jpg",
-  },
-  {
-    nom: "LIKO89",
-    prix: 839,
-    image: "images/bike-3.jpg",
-  },
-  {
-    nom: "GEWO8",
-    prix: 1249,
-    image: "images/bike-4.jpg",
-  },
-  {
-    nom: "KIWIT",
-    prix: 899,
-    image: "images/bike-5.jpg",
-  },
-  {
-    nom: "NASAY",
-    prix: 1399,
-    image: "images/bike-6.jpg",
-  },
-];
-
-const update_shipping = (tabl) => {
-  for (obj of tabl) {
-    var total = obj.quantity * dataBike[obj.bikeIndex].prix
-    if (total > 4000) {
-      obj.shippingCost = 0;
-    } else if (total > 2000) {
-      obj.shippingCost = 15*obj.quantity;
-    } else {
-      obj.shippingCost = 30*obj.quantity;
-    }
-  }
-  return
-}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -113,7 +66,6 @@ router.post('/shop', function(req, res, next) {
   dataCardBike[dataCardBike.indexOf(findBike)].quantity = parseInt(req.body.qty);
   req.session.total += parseInt(req.body.qty);
   update_shipping(dataCardBike);
-  console.log(dataCardBike);
   res.render("shop", { dataBike, dataCardBike })
 });
 
@@ -127,7 +79,7 @@ router.post('/create-checkout-session', async function(req, res, next) {
     });
     const price = await stripe.prices.create({
       product: product.id,
-      unit_amount: (dataBike[obj.bikeIndex].prix+(obj.shippingCost/obj.quantity)) * 100,
+      unit_amount: Math.floor((dataBike[obj.bikeIndex].prix+(obj.shipping[req.body[req.session.dataCardBike.indexOf(obj)]]/obj.quantity)) * 100),
       currency: 'eur',
     })
     line_items.push({
